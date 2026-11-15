@@ -1,4 +1,3 @@
-
 .globl _start
 
 _start:
@@ -29,9 +28,9 @@ wait:
 
     lbu t2, 0(t0) #What message have I received?
 
-    li t5, 127              # DEL?
+    li t5, 127 # Delete?
     beq t2, t5, backspace
-    li t5, 8                # Backspace?
+    li t5, 8 # Backspace?
     beq t2, t5, backspace
 
 
@@ -77,7 +76,7 @@ checkForCommands:
 
 checkForHello:
     lw t3, -3(s0) #What us the length of the messages?
-    li t1, 5
+    li t1, 6
     blt t3, t1, return
 
     lb t2, -4(s0)
