@@ -30,6 +30,12 @@ wait:
 
     lbu t2, 0(t0) #What message have I received?
 
+    li t5, 127              # DEL?
+    beq t2, t5, backspace
+    li t5, 8                # Backspace?
+    beq t2, t5, backspace
+
+
     sb t2, 0(t0)
 
     lw t3, -3(s0) #What us the length of the messages?
@@ -44,9 +50,31 @@ wait:
 
     li t5, 10
 
-    beq t5, t2, checkForHello
+    beq t5, t2, checkForCommands
 
     j wait #Repeat wait, do it like me: if you received a message, check your phone again in case a second message has come.
+
+backspace:
+    lw t3, -3(s0)           # Current length
+    beqz t3, wait           # Nothing to delete? Ignore it
+
+    addi t3, t3, -1         # Shrink message length
+    sw t3, -3(s0)
+    addi sp, sp, 1
+
+    li t1, 8                # Move cursor back
+    sb t1, 0(t0)
+    li t1, ' '              # Overwrite the character with a space
+    sb t1, 0(t0)
+    li t1, 8                # Move cursor back again
+    sb t1, 0(t0)
+
+    j wait
+
+checkForCommands:
+    la t6, checkForHello
+    jalr ra, 0(t6)
+    j rudeOption
 
 checkForHello:
     lw t3, -3(s0) #What us the length of the messages?
@@ -55,19 +83,19 @@ checkForHello:
 
     lb t2, -4(s0)
     li t3, 'H'
-    bne t2, t3, rudeOption
+    bne t2, t3, return
     lb t2, -5(s0)
     li t3, 'e'
-    bne t2, t3, rudeOption
+    bne t2, t3, return
     lb t2, -6(s0)
     li t3, 'l'
-    bne t2, t3, rudeOption
+    bne t2, t3, return
     lb  t2, -7(s0)
     li t3, 'l'
-    bne t2, t3, rudeOption
+    bne t2, t3, return
     lb t2, -8(s0)
     li t3, 'o'
-    bne t2, t3, rudeOption
+    bne t2, t3, return
 
     li t1, 'H'
     sb t1, 0(t0)
@@ -79,6 +107,9 @@ checkForHello:
     sb t1, 0(t0)
 
     j wipeMemory
+
+return:
+    ret
 
 rudeOption:
     li t1, 'H'
