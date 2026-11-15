@@ -10,7 +10,6 @@ _start:
 
     sw zero, -3(s0)
 
-    addi s1, s0, 4
 
     j newLine
 
@@ -76,6 +75,8 @@ checkForHello:
     sb t1, 0(t0)
     li t1, '.'
     sb t1, 0(t0)
+    li t1, 10
+    sb t1, 0(t0)
 
     j wipeMemory
 
@@ -120,9 +121,11 @@ rudeOption:
     j wipeMemory
 
 wipeMemory:
-    lbu zero, 0(sp)
+    sb zero, 0(sp)
     addi sp, sp, 1
 
     bne sp, s0, wipeMemory
+
+    sw zero, -3(s0)
 
     j newLine
