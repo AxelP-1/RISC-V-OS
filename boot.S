@@ -4,7 +4,7 @@
 _start:
     li t0, 0x10000000 #I/O device
     li s0, 0x88000000 #Message storage
-    li sp,0x88000000 #Stack pointer
+    li sp, 0x88000000 #Stack pointer
 
     addi sp, sp, -4
 
@@ -19,7 +19,6 @@ newLine:
     sb t1, 0(t0)
     li t1, ' '
     sb t1, 0(t0)
-
 
     j wait
 
@@ -97,6 +96,24 @@ checkForHello:
     li t3, 'o'
     bne t2, t3, return
 
+    lb t2, -9(s0)
+    li t3, 9
+    beq t2, t3, isWhitespace
+    li t3, 10
+    beq t2, t3, isWhitespace
+    li t3, 11
+    beq t2, t3, isWhitespace
+    li t3, 12
+    beq t2, t3, isWhitespace
+    li t3, 13
+    beq t2, t3, isWhitespace
+    li t3, 32
+    beq t2, t3, isWhitespace
+
+    j return
+
+
+isWhitespace:
     li t1, 'H'
     sb t1, 0(t0)
     li t1, 'i'
@@ -143,6 +160,22 @@ rudeOption:
     li t1, 'c'
     sb t1, 0(t0)
     li t1, 't'
+    sb t1, 0(t0)
+    li t1, ' '
+    sb t1, 0(t0)
+    li t1, 't'
+    sb t1, 0(t0)
+    li t1, 'o'
+    sb t1, 0(t0)
+    li t1, ' '
+    sb t1, 0(t0)
+    li t1, 'M'
+    sb t1, 0(t0)
+    li t1, 'y'
+    sb t1, 0(t0)
+    li t1, 'O'
+    sb t1, 0(t0)
+    li t1, 'S'
     sb t1, 0(t0)
     li t1, '.'
     sb t1, 0(t0)
