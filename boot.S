@@ -78,7 +78,7 @@ checkForCommands:
 checkForHello:
     lw t3, -3(s0) #What us the length of the messages?
     li t1, 5
-    blt t3, t1, rudeOption
+    blt t3, t1, return
 
     lb t2, -4(s0)
     li t3, 'H'
